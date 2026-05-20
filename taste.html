@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste · Breathe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>const t=localStorage.getItem('bf-theme');if(t)document.documentElement.classList.add('theme-'+t);</script>
+</head>
+<body>
+    <div class="screen active">
+        <div class="content content--has-tracker">
+            <header class="page-header">
+                <span class="step-badge">Step 5 of 5 &nbsp;·&nbsp; Taste</span>
+                <h1 class="heading">Go get something to taste.</h1>
+                <p class="subheading">Drink water, eat a snack, or chew gum</p>
+            </header>
+
+            <div class="taste-butterfly" id="tasteBf">
+                <div class="taste-bf-icon">
+                    <div class="taste-wing taste-wing--l"></div>
+                    <div class="taste-wing taste-wing--r"></div>
+                    <div class="taste-bf-body">
+                        <div class="proboscis" id="proboscis"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="taste-options">
+                <button class="taste-opt">
+                    <span class="taste-emoji">≈</span>
+                    <span class="taste-label">Water</span>
+                </button>
+                <button class="taste-opt">
+                    <span class="taste-emoji">✦</span>
+                    <span class="taste-label">Sweet candy</span>
+                </button>
+                <button class="taste-opt">
+                    <span class="taste-emoji">✸</span>
+                    <span class="taste-label">Sour candy</span>
+                </button>
+                <button class="taste-opt">
+                    <span class="taste-emoji">✿</span>
+                    <span class="taste-label">Snack</span>
+                </button>
+                <button class="taste-opt">
+                    <span class="taste-emoji">☽</span>
+                    <span class="taste-label">Mint / gum</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="prog-track">
+            <img class="prog-lily" src="images/lily.png" alt="">
+            <div class="prog-line">
+                <div class="prog-line-fill" style="width:88%"></div>
+                <div class="prog-butterfly" id="progButterfly" style="left:88%">
+                    <div class="prog-bf-icon">
+                        <div class="prog-wing prog-wing--l"></div>
+                        <div class="prog-wing prog-wing--r"></div>
+                        <div class="prog-bf-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.taste-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (document.getElementById('tasteBf').classList.contains('feeding')) return;
+                document.querySelectorAll('.taste-opt').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                document.getElementById('tasteBf').classList.add('feeding');
+                setTimeout(() => { window.location.href = 'grounded.html'; }, 950);
+            });
+        });
+
+        setTimeout(() => { const b = document.getElementById('progButterfly'); if(b){ b.classList.add('flapping'); setTimeout(()=>b.classList.remove('flapping'),1200); } }, 500);
+
+        if (localStorage.getItem('music-on') !== 'false') { document.getElementById('bgMusic').play().catch(() => {}); }
+    </script>
+    <audio id="bgMusic" loop src="images/theme-music.mp3"></audio>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smell · Breathe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>const t=localStorage.getItem('bf-theme');if(t)document.documentElement.classList.add('theme-'+t);</script>
+</head>
+<body>
+    <div class="screen active">
+        <div class="content content--smell content--has-tracker">
+            <header class="page-header">
+                <span class="step-badge">Step 4 of 5 &nbsp;·&nbsp; Smell</span>
+                <h1 class="heading">What can you smell?</h1>
+                <p class="subheading">Drag 2 scents to the antennas</p>
+            </header>
+
+            <div class="antenna-targets">
+                <div class="antenna-target">
+                    <div class="antenna-tip" id="tip1">
+                        <span class="antenna-drop-symbol" id="label1">?</span>
+                    </div>
+                    <div class="antenna-stem"></div>
+                </div>
+                <div class="antenna-target">
+                    <div class="antenna-tip" id="tip2">
+                        <span class="antenna-drop-symbol" id="label2">?</span>
+                    </div>
+                    <div class="antenna-stem"></div>
+                </div>
+            </div>
+
+            <div class="smell-palette" id="smellPalette"></div>
+        </div>
+
+        <div class="prog-track">
+            <img class="prog-lily" src="images/lily.png" alt="">
+            <div class="prog-line">
+                <div class="prog-line-fill" style="width:66%"></div>
+                <div class="prog-butterfly" id="progButterfly" style="left:66%">
+                    <div class="prog-bf-icon">
+                        <div class="prog-wing prog-wing--l"></div>
+                        <div class="prog-wing prog-wing--r"></div>
+                        <div class="prog-bf-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SCENTS = [
+            { symbol: '❀', label: 'rose'      },
+            { symbol: '≈', label: 'ocean'     },
+            { symbol: '♡', label: 'lavender'  },
+            { symbol: '✸', label: 'citrus'    },
+            { symbol: '≡', label: 'cedar'     },
+            { symbol: '☁', label: 'fresh air' },
+            { symbol: '∿', label: 'rain'      },
+            { symbol: '◎', label: 'vanilla'   },
+        ];
+
+        let dragEl    = null;
+        let dragSrc   = null;
+        let filled    = 0;
+
+        const tips   = [document.getElementById('tip1'), document.getElementById('tip2')];
+        const labels = [document.getElementById('label1'), document.getElementById('label2')];
+        const palette = document.getElementById('smellPalette');
+
+        SCENTS.forEach(s => {
+            const el = document.createElement('div');
+            el.className = 'smell-item';
+            el.innerHTML = `<span class="smell-symbol">${s.symbol}</span><span class="smell-label">${s.label}</span>`;
+            el.dataset.symbol = s.symbol;
+            el.addEventListener('pointerdown', startDrag);
+            palette.appendChild(el);
+        });
+
+        function startDrag(e) {
+            e.preventDefault();
+            dragSrc = e.currentTarget;
+            dragEl = dragSrc.cloneNode(true);
+            const r = dragSrc.getBoundingClientRect();
+            Object.assign(dragEl.style, {
+                position: 'fixed', width: r.width + 'px', zIndex: 1000,
+                pointerEvents: 'none', opacity: '0.92',
+                transform: 'scale(1.12)', transition: 'none',
+                left: (e.clientX - r.width / 2) + 'px',
+                top:  (e.clientY - r.height / 2) + 'px',
+                borderRadius: 'var(--radius-md)',
+            });
+            document.body.appendChild(dragEl);
+            document.addEventListener('pointermove', onMove);
+            document.addEventListener('pointerup',   onUp);
+        }
+
+        function onMove(e) {
+            if (!dragEl) return;
+            dragEl.style.left = (e.clientX - dragEl.offsetWidth  / 2) + 'px';
+            dragEl.style.top  = (e.clientY - dragEl.offsetHeight / 2) + 'px';
+            tips.forEach(tip => {
+                const rc = tip.getBoundingClientRect();
+                const dist = Math.hypot(e.clientX - (rc.left + rc.width/2), e.clientY - (rc.top + rc.height/2));
+                tip.classList.toggle('drag-over', dist < 48 && !tip.classList.contains('filled'));
+            });
+        }
+
+        function onUp(e) {
+            document.removeEventListener('pointermove', onMove);
+            document.removeEventListener('pointerup',   onUp);
+            if (dragEl) { dragEl.remove(); dragEl = null; }
+
+            tips.forEach((tip, i) => {
+                tip.classList.remove('drag-over');
+                if (tip.classList.contains('filled')) return;
+                const rc = tip.getBoundingClientRect();
+                const dist = Math.hypot(e.clientX - (rc.left + rc.width/2), e.clientY - (rc.top + rc.height/2));
+                if (dist < 52) {
+                    tip.classList.add('filled');
+                    labels[i].textContent = dragSrc.dataset.symbol;
+                    dragSrc.classList.add('used');
+                    filled++;
+                    if (filled >= 2) setTimeout(() => { window.location.href = 'taste.html'; }, 700);
+                }
+            });
+            dragSrc = null;
+        }
+
+        setTimeout(() => { const b = document.getElementById('progButterfly'); if(b){ b.classList.add('flapping'); setTimeout(()=>b.classList.remove('flapping'),1200); } }, 500);
+
+        if (localStorage.getItem('music-on') !== 'false') { document.getElementById('bgMusic').play().catch(() => {}); }
+    </script>
+    <audio id="bgMusic" loop src="images/theme-music.mp3"></audio>
+</body>
+</html>

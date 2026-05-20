@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>See · Breathe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>const t=localStorage.getItem('bf-theme');if(t)document.documentElement.classList.add('theme-'+t);</script>
+</head>
+<body>
+    <div class="screen active">
+<div class="content content--camera content--has-tracker">
+            <header class="page-header">
+                <span class="step-badge">Step 1 of 5 &nbsp;·&nbsp; See</span>
+                <h1 class="heading">What do you see?</h1>
+            </header>
+
+            <p class="camera-prompt" id="cameraPrompt">Find a plant</p>
+
+            <div class="camera-container">
+                <img class="wing wing--left" src="images/left.png" alt="">
+                <img class="wing wing--right" src="images/right.png" alt="">
+                <div class="camera-wrap" id="cameraWrap">
+                    <video class="camera-feed" id="cameraFeed" autoplay playsinline muted></video>
+
+                    <div class="frame-corner frame-corner--tl"></div>
+                    <div class="frame-corner frame-corner--tr"></div>
+                    <div class="frame-corner frame-corner--bl"></div>
+                    <div class="frame-corner frame-corner--br"></div>
+
+                    <div class="photo-counter" id="photoCounter">1 of 5</div>
+                    <div class="camera-flash" id="cameraFlash"></div>
+
+                    <div class="camera-error" id="cameraError">
+                        <p>Camera access is needed.<br>Allow permission and reload.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn--capture" id="btnCapture" aria-label="Take photo"></button>
+            <canvas id="captureCanvas" hidden></canvas>
+        </div>
+
+        <div class="prog-track">
+            <img class="prog-lily" src="images/lily.png" alt="">
+            <div class="prog-line">
+                <div class="prog-line-fill" style="width:0%"></div>
+                <div class="prog-butterfly" id="progButterfly" style="left:0%">
+                    <div class="prog-bf-icon">
+                        <div class="prog-wing prog-wing--l"></div>
+                        <div class="prog-wing prog-wing--r"></div>
+                        <div class="prog-bf-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function pickRandom(arr, n) {
+            return [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+        }
+
+        const PROMPTS = [
+            'Find a plant',                  'Find your keys',
+            'Find a pencil',                 'Find a cup or mug',
+            'Find a book',                   'Find a pillow',
+            'Find a window',                 'Find a bag',
+            'Find a photograph',             'Find a shoe',
+            'Find a clock',                  'Find a mirror',
+            'Find something red',            'Find something blue',
+            'Find something green',          'Find something yellow',
+            'Find something colorful',       'Find something that sparkles',
+            'Find something wooden',         'Find something circular',
+            'Find something you love',       'Find something that makes you smile',
+            'Find something with 4 legs',    'Find something older than you',
+            'Find something alive',          'Find something cozy',
+            'Find something that moves',     'Find something that makes noise',
+            'Find the tallest thing nearby', 'Find the smallest thing nearby',
+            'Find something a friend gave you','Find your favorite color',
+            'Find something soft',           'Find something shiny',
+            'Find something with a pattern', 'Find something you use every day',
+        ];
+
+        const TOTAL_PHOTOS   = 5;
+        let   cameraStream   = null;
+        let   photosTaken    = 0;
+        let   selectedPrompts = [];
+
+        const cameraFeedEl  = document.getElementById('cameraFeed');
+        const photoCounter  = document.getElementById('photoCounter');
+        const cameraFlash   = document.getElementById('cameraFlash');
+        const cameraError   = document.getElementById('cameraError');
+        const captureCanvas = document.getElementById('captureCanvas');
+        const btnCapture    = document.getElementById('btnCapture');
+        const cameraPrompt  = document.getElementById('cameraPrompt');
+
+        async function initCamera() {
+            photosTaken = 0;
+            selectedPrompts = pickRandom(PROMPTS, TOTAL_PHOTOS);
+            updatePhotoCounter();
+            setPrompt(selectedPrompts[0], false);
+            cameraError.classList.remove('visible');
+            btnCapture.disabled = false;
+
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 960 } }
+                });
+                cameraFeedEl.srcObject = cameraStream;
+            } catch (err) {
+                cameraError.classList.add('visible');
+                btnCapture.disabled = true;
+            }
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(t => t.stop());
+                cameraStream = null;
+                cameraFeedEl.srcObject = null;
+            }
+        }
+
+        function capturePhoto() {
+            if (photosTaken >= TOTAL_PHOTOS || !cameraStream) return;
+
+            captureCanvas.width  = cameraFeedEl.videoWidth  || 640;
+            captureCanvas.height = cameraFeedEl.videoHeight || 480;
+            captureCanvas.getContext('2d').drawImage(cameraFeedEl, 0, 0);
+            photosTaken++;
+            triggerFlash();
+
+            if (photosTaken >= TOTAL_PHOTOS) {
+                btnCapture.disabled = true;
+                setTimeout(() => { stopCamera(); window.location.href = 'touch.html'; }, 500);
+            } else {
+                updatePhotoCounter();
+                setPrompt(selectedPrompts[photosTaken], true);
+            }
+        }
+
+        function updatePhotoCounter() {
+            photoCounter.textContent = `${photosTaken + 1} of ${TOTAL_PHOTOS}`;
+        }
+
+        function setPrompt(text, fade) {
+            if (!fade) { cameraPrompt.textContent = text; return; }
+            cameraPrompt.style.opacity = '0';
+            setTimeout(() => { cameraPrompt.textContent = text; cameraPrompt.style.opacity = '1'; }, 220);
+        }
+
+        function triggerFlash() {
+            cameraFlash.style.transition = 'none';
+            cameraFlash.style.opacity = '0.8';
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                cameraFlash.style.transition = 'opacity 0.35s ease';
+                cameraFlash.style.opacity = '0';
+            }));
+        }
+
+        btnCapture.addEventListener('click', capturePhoto);
+
+        initCamera();
+        setTimeout(() => { const b = document.getElementById('progButterfly'); if(b){ b.classList.add('flapping'); setTimeout(()=>b.classList.remove('flapping'),1200); } }, 500);
+
+        if (localStorage.getItem('music-on') !== 'false') { document.getElementById('bgMusic').play().catch(() => {}); }
+    </script>
+    <audio id="bgMusic" loop src="images/theme-music.mp3"></audio>
+</body>
+</html>
