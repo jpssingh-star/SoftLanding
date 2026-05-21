@@ -163,7 +163,7 @@ body {
 /* ─── Breathing screen ───────────────────────────────────── */
 
 .screen--breathing {
-    background: var(--teal);
+    background: color-mix(in srgb, var(--teal) 55%, var(--teal-deep) 45%);
     justify-content: center;
 }
 
