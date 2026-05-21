@@ -1157,3 +1157,48 @@ body {
     80%  { opacity: 0.9; }
     100% { transform: translateY(110vh) rotate(720deg) scale(1);  opacity: 0; }
 }
+
+/* ─── Mobile ─────────────────────────────────────────────── */
+
+@media (max-width: 430px) {
+    .content {
+        padding: 2rem 1.25rem;
+        gap: 1.3rem;
+    }
+
+    .breathing-content {
+        gap: 1.5rem;
+        padding-top: 4.5rem;
+        padding-bottom: 2rem;
+    }
+
+    .butterfly-video {
+        width: 260px;
+        height: 260px;
+    }
+
+    .heading {
+        font-size: 1.65rem;
+    }
+
+    .subheading {
+        font-size: 0.88rem;
+    }
+
+    .btn {
+        padding: 0.82rem 1.2rem;
+        font-size: 0.92rem;
+    }
+
+    .btn-group {
+        max-width: 280px;
+    }
+
+    .content--has-tracker {
+        padding-top: 62px;
+    }
+
+    .step-badge {
+        font-size: 0.7rem;
+    }
+}
