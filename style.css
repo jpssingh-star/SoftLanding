@@ -1190,7 +1190,7 @@ body {
 }
 
 .btn-group {
-    max-width: clamp(260px, 80vw, 320px);
+    max-width: clamp(200px, 65vw, 320px);
 }
 
 /* Only for very small phones (iPhone SE, older Androids) */
