@@ -55,8 +55,8 @@ html.theme-morpho {
 .species-picker {
     display: flex;
     gap: 0.6rem;
-    justify-content: center;
-    padding-right: 52px;
+    justify-content: flex-start;
+    width: 100%;
 }
 
 .species-btn {
