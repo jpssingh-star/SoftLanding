@@ -52,11 +52,21 @@ html.theme-morpho {
 
 /* ─── Species picker (start page) ───────────────────────── */
 
+.home-top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    z-index: 10;
+}
+
 .species-picker {
     display: flex;
     gap: 0.6rem;
-    justify-content: flex-start;
-    width: 100%;
 }
 
 .species-btn {
@@ -300,12 +310,9 @@ body {
 }
 
 .sound-toggle {
-    position: fixed;
-    top: 18px;
-    right: 18px;
-    z-index: 200;
     width: 42px;
     height: 42px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;

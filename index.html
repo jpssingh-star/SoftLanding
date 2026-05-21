@@ -12,7 +12,7 @@
 </head>
 <body>
     <div class="screen active screen--breathing">
-        <div class="content breathing-content">
+        <div class="home-top-bar">
             <div class="species-picker" id="speciesPicker">
                 <button class="species-btn" data-theme="" data-video="images/breathingbutterfly.mp4">
                     <div class="species-icon" style="--wc:#ECC840"></div>
@@ -27,6 +27,9 @@
                     <span>Blue Morpho</span>
                 </button>
             </div>
+            <button class="sound-toggle" id="soundToggle" aria-label="Toggle music"></button>
+        </div>
+        <div class="content breathing-content">
             <p class="app-name">Soft Landing</p>
             <video class="butterfly-video" id="butterflyVideo" autoplay loop muted playsinline>
                 <source src="images/breathingbutterfly.mp4" type="video/mp4">
@@ -39,7 +42,6 @@
                 <button class="btn btn--fill" id="btnReady">I'm ready</button>
             </div>
         </div>
-        <button class="sound-toggle" id="soundToggle" aria-label="Toggle music"></button>
     </div>
 
     <audio id="bgMusic" loop src="images/theme-music.mp3"></audio>
