@@ -1158,47 +1158,48 @@ body {
     100% { transform: translateY(110vh) rotate(720deg) scale(1);  opacity: 0; }
 }
 
-/* ─── Mobile ─────────────────────────────────────────────── */
+/* ─── Fluid / Mobile ─────────────────────────────────────── */
 
-@media (max-width: 430px) {
-    .content {
-        padding: 2rem 1.25rem;
-        gap: 1.3rem;
-    }
+/* Scales smoothly across all phone sizes */
+.butterfly-video {
+    width: clamp(240px, 72vw, 380px);
+    height: clamp(240px, 72vw, 380px);
+}
 
-    .breathing-content {
-        gap: 1.5rem;
-        padding-top: 4.5rem;
-        padding-bottom: 2rem;
-    }
+.heading {
+    font-size: clamp(1.55rem, 5.5vw, 2rem);
+}
 
+.subheading {
+    font-size: clamp(0.85rem, 3vw, 0.97rem);
+}
+
+.content {
+    padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1.1rem, 4vw, 1.5rem);
+    gap: clamp(1.2rem, 4vw, 1.75rem);
+}
+
+.breathing-content {
+    gap: clamp(1.4rem, 4.5vw, 2.2rem);
+    padding-top: clamp(3.2rem, 9vw, 3.8rem);
+}
+
+.btn {
+    padding: clamp(0.78rem, 2.8vw, 1.05rem) 1.5rem;
+    font-size: clamp(0.88rem, 3.2vw, 1.02rem);
+}
+
+.btn-group {
+    max-width: clamp(260px, 80vw, 320px);
+}
+
+/* Only for very small phones (iPhone SE, older Androids) */
+@media (max-width: 375px) {
     .butterfly-video {
-        width: 260px;
-        height: 260px;
+        width: 230px;
+        height: 230px;
     }
-
-    .heading {
-        font-size: 1.65rem;
-    }
-
-    .subheading {
-        font-size: 0.88rem;
-    }
-
-    .btn {
-        padding: 0.82rem 1.2rem;
-        font-size: 0.92rem;
-    }
-
-    .btn-group {
-        max-width: 280px;
-    }
-
     .content--has-tracker {
-        padding-top: 62px;
-    }
-
-    .step-badge {
-        font-size: 0.7rem;
+        padding-top: 58px;
     }
 }
