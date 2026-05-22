@@ -151,7 +151,7 @@
                 recordingCount++;
 
                 if (recordingCount >= TOTAL_RECORDINGS) {
-                    hearStatus.textContent = 'Beautiful. Well done.';
+                    hearStatus.textContent = 'Well done!';
                     btnRecord.disabled = true;
                     setTimeout(() => { stopAudio(); window.location.href = 'smell.html'; }, 900);
                 } else {
