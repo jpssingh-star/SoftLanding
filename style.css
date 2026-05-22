@@ -1309,8 +1309,8 @@ html.theme-morpho .butterfly-video {
 }
 
 .smell-lilies .antenna-tip {
-    width: 130px !important;
-    height: 130px !important;
+    width: 155px !important;
+    height: 155px !important;
     border: none !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -1332,31 +1332,45 @@ html.theme-morpho .butterfly-video {
 
 .smell-lilies .antenna-tip .antenna-drop-symbol {
     position: absolute;
-    top: 50%;
+    top: 44%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
     font-size: 1rem;
-    color: var(--text-muted);
+    font-weight: 700;
+    font-family: 'Quicksand', sans-serif;
+    color: var(--text-soft);
+    background: rgba(255, 255, 255, 0.82);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 6px rgba(26,50,64,0.13);
+    border: 2px solid rgba(26,50,64,0.12);
+    backdrop-filter: blur(2px);
 }
 
 .smell-lilies .antenna-tip.drag-over {
-    border: none;
-    background: transparent;
-    box-shadow: none;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
     transform: scale(1.1);
 }
 
 .smell-lilies .antenna-tip.filled {
-    border: none;
-    background: transparent;
-    box-shadow: none;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
     transform: scale(1.06);
 }
 
 .smell-lilies .antenna-tip.filled .antenna-drop-symbol {
-    color: var(--text);
     font-size: 1.1rem;
+    background: rgba(255,255,255,0.95);
+    color: var(--text);
+    border-color: rgba(26,50,64,0.22);
 }
 
 /* Only for very small phones (iPhone SE, older Androids) */
