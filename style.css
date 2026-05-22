@@ -954,6 +954,7 @@ html.theme-morpho .butterfly-video {
     box-shadow: var(--shadow-sm);
     cursor: pointer;
     text-align: left;
+    font-family: 'Quicksand', sans-serif;
     transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.18s ease, border-color 0.18s ease;
     -webkit-tap-highlight-color: transparent;
 }
