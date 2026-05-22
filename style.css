@@ -1317,6 +1317,65 @@ html.theme-morpho .butterfly-video {
 #tip1 { left: 27%; top: 15%; }
 #tip2 { left: 73%; top: 15%; }
 
+/* ─── Smell lily drop zones ───────────────────────────────── */
+
+.smell-lilies {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.smell-lilies .antenna-tip {
+    width: 110px;
+    height: 110px;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.smell-lily-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.smell-lilies .antenna-tip .antenna-drop-symbol {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+.smell-lilies .antenna-tip.drag-over {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    transform: scale(1.1);
+}
+
+.smell-lilies .antenna-tip.filled {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    transform: scale(1.06);
+}
+
+.smell-lilies .antenna-tip.filled .antenna-drop-symbol {
+    color: var(--text);
+    font-size: 1.7rem;
+}
+
 /* Only for very small phones (iPhone SE, older Androids) */
 @media (max-width: 375px) {
     .butterfly-video {
