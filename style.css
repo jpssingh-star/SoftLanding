@@ -1321,14 +1321,15 @@ html.theme-morpho .butterfly-video {
 
 .smell-lilies {
     display: flex;
-    gap: 3rem;
+    gap: 1.2rem;
     align-items: center;
     justify-content: center;
+    width: 100%;
 }
 
 .smell-lilies .antenna-tip {
-    width: 110px;
-    height: 110px;
+    width: clamp(130px, 38vw, 160px);
+    height: clamp(130px, 38vw, 160px);
     border: none;
     background: transparent;
     box-shadow: none;
