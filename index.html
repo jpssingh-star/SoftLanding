@@ -633,17 +633,27 @@ document.getElementById('btnClose').addEventListener('click', () => {
 // ── Confetti ──────────────────────────────────────────────
 function launchConfetti() {
     const layer = document.getElementById('confettiLayer');
-    function spawn(delay) {
+    function spawn(delay, x) {
         const el = document.createElement('img');
         el.src = 'images/lily.png'; el.className = 'conf conf-lily';
-        const x = 5 + Math.random() * 90, dur = 2.0 + Math.random() * 2.4;
+        const dur = 2.0 + Math.random() * 2.4;
         const sz = 18 + Math.random() * 82, rot = Math.random() * 360;
         el.style.cssText = `left:${x}%;width:${sz}px;transform:rotate(${rot}deg);animation-name:confFall;animation-duration:${dur}s;animation-delay:${delay}s;animation-fill-mode:forwards;`;
         layer.appendChild(el);
         setTimeout(() => el.remove(), (delay + dur + 0.2) * 1000);
     }
-    for (let i = 0; i < 54; i++) spawn(i * (0.6 / 54));
-    setTimeout(() => { for (let i = 0; i < 24; i++) spawn(i * 0.04); }, 1200);
+    const count1 = 54;
+    for (let i = 0; i < count1; i++) {
+        const x = 5 + (i / count1) * 90 + (Math.random() - 0.5) * 6;
+        spawn(i * (0.6 / count1), x);
+    }
+    setTimeout(() => {
+        const count2 = 24;
+        for (let i = 0; i < count2; i++) {
+            const x = 5 + (i / count2) * 90 + (Math.random() - 0.5) * 6;
+            spawn(i * 0.04, x);
+        }
+    }, 1200);
 }
 </script>
 </body>
