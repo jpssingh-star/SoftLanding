@@ -1296,27 +1296,6 @@ html.theme-morpho .butterfly-video {
 
 /* ─── Smell body drop target ──────────────────────────────── */
 
-.smell-body-wrap {
-    position: relative;
-    display: inline-block;
-    margin-top: 36px;
-    overflow: visible;
-}
-
-.smell-body-img {
-    width: min(320px, 85vw);
-    height: auto;
-    display: block;
-}
-
-.smell-body-wrap .antenna-tip {
-    position: absolute;
-    transform: translate(-50%, -50%);
-}
-
-#tip1 { left: 27%; top: 15%; }
-#tip2 { left: 73%; top: 15%; }
-
 /* ─── Smell lily drop zones ───────────────────────────────── */
 
 .smell-lilies {
