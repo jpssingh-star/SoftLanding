@@ -151,7 +151,7 @@ body {
     overflow-y: auto;
     background: url('images/swallowtailbg.png') center/cover no-repeat;
     animation: pageEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
-    padding-top: clamp(5rem, 13vw, 7rem);
+    padding-top: clamp(6rem, 15vw, 8rem);
 }
 
 html.theme-monarch .screen {
@@ -1203,7 +1203,7 @@ html.theme-morpho .screen {
 
 .breathing-content {
     gap: clamp(1.4rem, 4.5vw, 2.2rem);
-    padding-top: clamp(9rem, 22vw, 11rem);
+    padding-top: clamp(10rem, 24vw, 12rem);
 }
 
 .btn {
@@ -1256,7 +1256,7 @@ html.theme-morpho .screen {
     transform: translate(-50%, -50%);
 }
 
-#tip1 { left: 22%; top: 15%; }
+#tip1 { left: 27%; top: 15%; }
 #tip2 { left: 73%; top: 15%; }
 
 /* Only for very small phones (iPhone SE, older Androids) */
