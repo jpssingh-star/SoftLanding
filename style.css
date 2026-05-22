@@ -1321,22 +1321,24 @@ html.theme-morpho .butterfly-video {
 
 .smell-lilies {
     display: flex;
-    gap: 0.4rem;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
     align-items: center;
     justify-content: center;
     width: 100%;
 }
 
 .smell-lilies .antenna-tip {
-    width: 44%;
-    max-width: 155px;
-    aspect-ratio: 1;
-    height: auto;
-    border: none;
-    background: transparent;
-    box-shadow: none;
-    border-radius: 0;
-    position: relative;
+    width: 130px !important;
+    height: 130px !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    position: relative !important;
+    flex-shrink: 0;
+    display: block !important;
 }
 
 .smell-lily-img {
