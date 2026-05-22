@@ -206,19 +206,10 @@ html.theme-monarch .screen {
     background: url('images/monarchbg.png') top center/cover no-repeat;
 }
 
-html.theme-monarch .butterfly-video {
-    object-position: 50% 72%;
-    transform: translateX(-14%);
-}
-
 html.theme-morpho .screen {
     background: url('images/morphobg.png') top center/cover no-repeat;
 }
 
-html.theme-morpho .butterfly-video {
-    object-position: 50% 72%;
-    transform: translateX(-14%);
-}
 
 /* ─── Breathing screen ───────────────────────────────────── */
 
@@ -250,19 +241,8 @@ html.theme-morpho .butterfly-video {
     100% { transform: translateY(-130%) scale(0.9); opacity: 0; }
 }
 
-@keyframes butterflyFlyUpOffset {
-    0%   { transform: translateX(-14%) translateY(0) scale(1);    opacity: 1; }
-    60%  { transform: translateX(-14%) translateY(-30%) scale(1.08); opacity: 1; }
-    100% { transform: translateX(-14%) translateY(-130%) scale(0.9); opacity: 0; }
-}
-
 .butterfly-video.flying-up {
     animation: butterflyFlyUp 0.68s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-html.theme-monarch .butterfly-video.flying-up,
-html.theme-morpho .butterfly-video.flying-up {
-    animation: butterflyFlyUpOffset 0.68s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .heading--light   { color: var(--theme-text); }
