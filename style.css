@@ -207,7 +207,7 @@ html.theme-monarch .screen {
 }
 
 html.theme-monarch .butterfly-video {
-    object-position: center 40%;
+    object-position: 62% 58%;
 }
 
 html.theme-morpho .screen {
@@ -215,7 +215,7 @@ html.theme-morpho .screen {
 }
 
 html.theme-morpho .butterfly-video {
-    object-position: center 40%;
+    object-position: 62% 58%;
 }
 
 /* ─── Breathing screen ───────────────────────────────────── */
@@ -372,27 +372,42 @@ html.theme-morpho .butterfly-video {
 }
 
 .sound-toggle {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    z-index: 30;
     width: 42px;
     height: 42px;
-    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.20);
-    border: 1.5px solid rgba(255, 255, 255, 0.25);
-    color: rgba(255, 255, 255, 0.80);
+    background: rgba(255, 255, 255, 0.55);
+    border: 1.5px solid rgba(26, 50, 64, 0.18);
+    color: var(--text-soft);
     cursor: pointer;
     border-radius: 50%;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     transition: color 0.2s, background 0.2s, border-color 0.2s;
     -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 12px rgba(26,50,64,0.10);
 }
 
 .sound-toggle:hover {
-    color: #fff;
+    background: rgba(255, 255, 255, 0.80);
+    border-color: rgba(26, 50, 64, 0.30);
+}
+
+.screen--breathing .sound-toggle {
+    background: rgba(0, 0, 0, 0.20);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.screen--breathing .sound-toggle:hover {
     background: rgba(0, 0, 0, 0.34);
     border-color: rgba(255, 255, 255, 0.5);
+    color: #fff;
 }
 
 .btn--large {
@@ -418,7 +433,7 @@ html.theme-morpho .butterfly-video {
 }
 
 .content--has-tracker {
-    padding-top: clamp(3rem, 8vw, 4rem);
+    padding-top: clamp(4.5rem, 11vw, 5.5rem);
 }
 
 /* ─── Camera butterfly wings ─────────────────────────────── */
@@ -1309,8 +1324,8 @@ html.theme-morpho .butterfly-video {
 }
 
 .smell-lilies .antenna-tip {
-    width: 155px !important;
-    height: 155px !important;
+    width: 175px !important;
+    height: 175px !important;
     border: none !important;
     background: transparent !important;
     box-shadow: none !important;
