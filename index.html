@@ -14,29 +14,26 @@
     <div class="screen active screen--breathing">
         <div class="home-top-bar">
             <div class="species-picker" id="speciesPicker">
-                <button class="species-btn" data-theme="" data-video="images/breathingbutterfly.mp4">
-                    <div class="species-icon" style="--wc:#ECC840"></div>
+                <button class="species-btn" data-theme="" data-gif="images/swallowtail.gif">
+                    <img class="species-icon" src="images/swallowtail.png" alt="">
                     <span>Swallowtail</span>
                 </button>
-                <button class="species-btn" data-theme="monarch" data-video="images/butterfly-monarch.mp4">
-                    <div class="species-icon" style="--wc:#F4820A"></div>
+                <button class="species-btn" data-theme="monarch" data-gif="images/monarch.gif">
+                    <img class="species-icon" src="images/monarch.png" alt="">
                     <span>Monarch</span>
                 </button>
-                <button class="species-btn" data-theme="morpho" data-video="images/butterfly-morpho.mp4">
-                    <div class="species-icon" style="--wc:#E85D9A"></div>
+                <button class="species-btn" data-theme="morpho" data-gif="images/bluemorpho.gif">
+                    <img class="species-icon" src="images/bluemorpho.png" alt="">
                     <span>Blue Morpho</span>
                 </button>
             </div>
             <button class="sound-toggle" id="soundToggle" aria-label="Toggle music"></button>
         </div>
         <div class="content breathing-content">
-            <p class="app-name">Soft Landing</p>
-            <video class="butterfly-video" id="butterflyVideo" autoplay loop muted playsinline>
-                <source src="images/breathingbutterfly.mp4" type="video/mp4">
-            </video>
+            <img class="butterfly-video" id="butterflyVideo" src="images/swallowtail.gif" alt="">
             <header class="page-header">
-                <h1 class="heading heading--light">You're safe here.</h1>
-                <p class="subheading subheading--light">Let's slow down together</p>
+                <h1 class="heading heading--light">Soft Landing</h1>
+                <p class="subheading subheading--light">Grounding made gentle</p>
             </header>
             <div class="btn-group">
                 <button class="btn btn--fill" id="btnReady">I'm ready</button>
@@ -44,27 +41,22 @@
         </div>
     </div>
 
-    <audio id="bgMusic" loop src="images/theme-music.mp3"></audio>
+    <audio id="bgMusic" loop src="Pufino - Hopeful (freetouse.com).mp3"></audio>
 
     <script>
         // Species picker
-        const video = document.getElementById('butterflyVideo');
-        const VIDEOS = {
-            '':       'images/breathingbutterfly.mp4',
-            'monarch':'images/butterfly-monarch.mp4',
-            'morpho': 'images/butterfly-morpho.mp4',
+        const bfImg = document.getElementById('butterflyVideo');
+        const GIFS = {
+            '':       'images/swallowtail.gif',
+            'monarch':'images/monarch.gif',
+            'morpho': 'images/bluemorpho.gif',
         };
 
-        function applyTheme(theme, videoSrc) {
+        function applyTheme(theme, gifSrc) {
             localStorage.setItem('bf-theme', theme);
             document.documentElement.classList.remove('theme-monarch', 'theme-morpho');
             if (theme) document.documentElement.classList.add('theme-' + theme);
-            // Swap butterfly video
-            const src = videoSrc || VIDEOS[theme] || VIDEOS[''];
-            if (video.querySelector('source').src !== new URL(src, location.href).href) {
-                video.querySelector('source').setAttribute('src', src);
-                video.load(); video.play();
-            }
+            bfImg.src = gifSrc || GIFS[theme] || GIFS[''];
         }
 
         const saved = localStorage.getItem('bf-theme') || '';
@@ -73,17 +65,15 @@
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.species-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                applyTheme(btn.dataset.theme, btn.dataset.video);
+                applyTheme(btn.dataset.theme, btn.dataset.gif);
             });
         });
 
-        // Restore saved video on load
+        // Restore saved gif on load
         applyTheme(saved);
 
         document.getElementById('btnReady').addEventListener('click', () => {
-            const video = document.getElementById('butterflyVideo');
-            video.classList.add('flying-up');
-            // Ensure music preference is saved before navigating
+            bfImg.classList.add('flying-up');
             if (musicOn) { music.play().catch(() => {}); }
             setTimeout(() => { window.location.href = 'camera.html'; }, 680);
         });
@@ -102,13 +92,16 @@
             toggleBtn.innerHTML = play ? ICON_ON : ICON_OFF;
             toggleBtn.setAttribute('aria-label', play ? 'Music on' : 'Music off');
             if (play) {
+                const t = parseFloat(localStorage.getItem('music-time') || '0');
                 music.play().catch(() => {});
+                if (t > 0) { music.currentTime = t; }
             } else {
                 music.pause();
             }
         }
 
         toggleBtn.addEventListener('click', () => applyMusicState(!musicOn));
+        window.addEventListener('pagehide', () => { localStorage.setItem('music-time', music.currentTime); });
 
         // Auto-start if preference is on (requires user gesture — handled on btnReady)
         applyMusicState(musicOn);

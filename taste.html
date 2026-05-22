@@ -20,13 +20,7 @@
             </header>
 
             <div class="taste-butterfly" id="tasteBf">
-                <div class="taste-bf-icon">
-                    <div class="taste-wing taste-wing--l"></div>
-                    <div class="taste-wing taste-wing--r"></div>
-                    <div class="taste-bf-body">
-                        <div class="proboscis" id="proboscis"></div>
-                    </div>
-                </div>
+                <img class="taste-bf-img" src="" alt="">
             </div>
 
             <div class="taste-options">
@@ -58,28 +52,34 @@
             <div class="prog-line">
                 <div class="prog-line-fill" style="width:88%"></div>
                 <div class="prog-butterfly" id="progButterfly" style="left:88%">
-                    <div class="prog-bf-icon">
-                        <div class="prog-wing prog-wing--l"></div>
-                        <div class="prog-wing prog-wing--r"></div>
-                        <div class="prog-bf-body"></div>
-                    </div>
+                    <img class="prog-bf-img" src="" alt="">
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.querySelectorAll('.taste-opt').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (document.getElementById('tasteBf').classList.contains('feeding')) return;
-                document.querySelectorAll('.taste-opt').forEach(b => b.classList.remove('selected'));
-                btn.classList.add('selected');
-                document.getElementById('tasteBf').classList.add('feeding');
-                setTimeout(() => { window.location.href = 'grounded.html'; }, 950);
-            });
-        });
+        (function() {
+            const _t   = localStorage.getItem('bf-theme') || '';
+            const _png  = {'': 'images/swallowtail.png',      'monarch': 'images/monarch.png',      'morpho': 'images/bluemorpho.png'};
+            const _flap = {'': 'images/swallowtail.gif', 'monarch': 'images/monarch.gif', 'morpho': 'images/bluemorpho.gif'};
+            const tasteBfImg = document.querySelector('.taste-bf-img');
 
-        setTimeout(() => { const b = document.getElementById('progButterfly'); if(b){ b.classList.add('flapping'); setTimeout(()=>b.classList.remove('flapping'),1200); } }, 500);
+            document.querySelector('.prog-bf-img').src = _flap[_t] || _flap[''];
+            tasteBfImg.src = _png[_t] || _png[''];
+
+            let fed = false;
+            document.querySelectorAll('.taste-opt').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (fed) return;
+                    fed = true;
+                    document.querySelectorAll('.taste-opt').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    tasteBfImg.src = _flap[_t] || _flap[''];
+                    setTimeout(() => { window.location.href = 'grounded.html'; }, 1400);
+                });
+            });
+        })();
 
         if (localStorage.getItem('music-on') !== 'false') { document.getElementById('bgMusic').play().catch(() => {}); }
     </script>

@@ -20,6 +20,11 @@
     --shadow-sm:    0 2px 12px rgba(26, 80, 100, 0.07);
     --shadow-md:    0 4px 22px rgba(26, 80, 100, 0.10);
     --shadow-lg:    0 8px 36px rgba(26, 80, 100, 0.13);
+    --screen-bg:       #1A0B38;
+    --g1-rgb:          236, 200, 64;
+    --g2-rgb:          140, 60, 210;
+    --theme-text:      #4A2C00;
+    --theme-text-soft: rgba(74, 44, 0, 0.65);
 }
 
 /* ─── Colour themes ──────────────────────────────────────── */
@@ -35,6 +40,11 @@ html.theme-monarch {
     --yellow-rgb:      244, 130, 10;
     --yellow-deep-rgb: 196, 90, 0;
     --teal-rgb:        75, 126, 200;
+    --screen-bg:       #081525;
+    --g1-rgb:          244, 130, 10;
+    --g2-rgb:          20, 80, 190;
+    --theme-text:      #5A1E00;
+    --theme-text-soft: rgba(90, 30, 0, 0.65);
 }
 
 html.theme-morpho {
@@ -48,6 +58,11 @@ html.theme-morpho {
     --yellow-rgb:      232, 93, 154;
     --yellow-deep-rgb: 184, 48, 112;
     --teal-rgb:        91, 155, 213;
+    --screen-bg:       #080825;
+    --g1-rgb:          50, 130, 240;
+    --theme-text:      #061440;
+    --theme-text-soft: rgba(6, 20, 64, 0.65);
+    --g2-rgb:          150, 50, 210;
 }
 
 /* ─── Species picker (start page) ───────────────────────── */
@@ -79,7 +94,7 @@ html.theme-morpho {
     border-radius: var(--radius-md);
     padding: 0.5rem 0.65rem;
     cursor: pointer;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--theme-text);
     font-size: 0.6rem;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
@@ -92,33 +107,14 @@ html.theme-morpho {
 .species-btn.active {
     background: rgba(255, 255, 255, 0.28);
     border-color: rgba(255, 255, 255, 0.85);
-    color: #fff;
+    color: var(--theme-text);
 }
 
 .species-icon {
     width: 34px;
     height: 24px;
-    position: relative;
-}
-
-.species-icon::before,
-.species-icon::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 15px;
-    height: 22px;
-    background: var(--wc, #ECC840);
-}
-
-.species-icon::before {
-    right: calc(50% + 1px);
-    border-radius: 65% 35% 30% 70% / 55% 45% 55% 45%;
-}
-
-.species-icon::after {
-    left: calc(50% + 1px);
-    border-radius: 35% 65% 70% 30% / 45% 55% 45% 55%;
+    object-fit: contain;
+    display: block;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -153,29 +149,38 @@ body {
     align-items: center;
     justify-content: center;
     overflow-y: auto;
-    background:
-        radial-gradient(ellipse at 92% 8%,  rgba(var(--teal-rgb), 0.28) 0%, transparent 52%),
-        radial-gradient(ellipse at 8%  92%, rgba(var(--yellow-rgb), 0.13) 0%, transparent 52%),
-        var(--bg);
+    background: url('images/swallowtailbg.png') center/cover no-repeat;
     animation: pageEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+html.theme-monarch .screen {
+    background: url('images/monarchbg.png') center/cover no-repeat;
+}
+
+html.theme-morpho .screen {
+    background: url('images/morphobg.png') center/cover no-repeat;
 }
 
 /* ─── Breathing screen ───────────────────────────────────── */
 
 .screen--breathing {
-    background: color-mix(in srgb, var(--teal) 55%, var(--teal-deep) 45%);
     justify-content: center;
 }
 
 .breathing-content {
     gap: 2.2rem;
-    padding-top: 3.8rem;
+    padding-top: 6rem;
     padding-bottom: 2.5rem;
 }
 
+.breathing-content .butterfly-video {
+    width: clamp(340px, 92vw, 520px);
+    height: clamp(340px, 92vw, 520px);
+}
+
 .butterfly-video {
-    width: 380px;
-    height: 380px;
+    width: 460px;
+    height: 460px;
     object-fit: contain;
     transition: opacity 0.3s ease;
 }
@@ -190,8 +195,8 @@ body {
     animation: butterflyFlyUp 0.68s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.heading--light   { color: #fff; }
-.subheading--light { color: rgba(255, 255, 255, 0.92); font-weight: 700; }
+.heading--light   { color: var(--theme-text); }
+.subheading--light { color: var(--theme-text-soft); font-weight: 700; }
 
 .app-name {
     font-family: 'Baloo 2', cursive;
@@ -199,13 +204,13 @@ body {
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--theme-text-soft);
 }
 
 .breathe-cue {
     font-size: 1rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.82);
+    color: var(--theme-text-soft);
     letter-spacing: 0.04em;
     min-height: 1.5em;
     transition: opacity 0.5s ease;
@@ -213,14 +218,14 @@ body {
 
 .btn--ghost-light {
     background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.75);
-    color: #fff;
+    border-color: var(--theme-text);
+    color: var(--theme-text);
 }
 
 .btn--ghost-light:hover {
     background: rgba(255, 255, 255, 0.28);
-    border-color: #fff;
-    color: #fff;
+    border-color: var(--theme-text);
+    color: var(--theme-text);
 }
 
 /* ─── Typography ─────────────────────────────────────────── */
@@ -282,7 +287,7 @@ body {
 
 .btn--fill {
     background: var(--yellow);
-    color: var(--text);
+    color: var(--theme-text);
     box-shadow: 0 5px 0 var(--yellow-deep), var(--shadow-md);
 }
 
@@ -380,13 +385,7 @@ body {
     pointer-events: none;
 }
 
-.wing--left {
-    left: -210px;
-}
 
-.wing--right {
-    right: -160px;
-}
 
 /* ─── Camera Screen ──────────────────────────────────────── */
 
@@ -842,6 +841,13 @@ body {
     align-items: flex-start;
 }
 
+.taste-bf-img {
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
 .taste-bf-icon {
     width: 80px;
     height: 62px;
@@ -1055,6 +1061,13 @@ body {
     z-index: 1;
 }
 
+.prog-bf-img {
+    width: 68px;
+    height: auto;
+    display: block;
+    transform: scaleX(-1);
+}
+
 @keyframes progFlapL {
     0%, 100% { transform: rotateY(0deg); }
     50%       { transform: rotateY(68deg); }
@@ -1170,8 +1183,8 @@ body {
 
 /* Scales smoothly across all phone sizes */
 .butterfly-video {
-    width: clamp(240px, 72vw, 380px);
-    height: clamp(240px, 72vw, 380px);
+    width: clamp(300px, 88vw, 460px);
+    height: clamp(300px, 88vw, 460px);
 }
 
 .heading {
@@ -1201,11 +1214,55 @@ body {
     max-width: clamp(200px, 65vw, 320px);
 }
 
+/* ─── Screen text overrides ───────────────────────────────── */
+
+.screen:not(.screen--breathing) .heading {
+    color: var(--theme-text);
+}
+.screen:not(.screen--breathing) .subheading {
+    color: var(--theme-text-soft);
+}
+.screen:not(.screen--breathing) .touch-progress {
+    color: var(--theme-text-soft);
+}
+.screen:not(.screen--breathing) .touch-progress.complete {
+    color: var(--theme-text);
+}
+.screen:not(.screen--breathing) .hear-status {
+    color: var(--theme-text-soft);
+}
+.screen:not(.screen--breathing) .prog-line {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* ─── Smell body drop target ──────────────────────────────── */
+
+.smell-body-wrap {
+    position: relative;
+    display: inline-block;
+    margin-top: 36px;
+    overflow: visible;
+}
+
+.smell-body-img {
+    width: min(320px, 85vw);
+    height: auto;
+    display: block;
+}
+
+.smell-body-wrap .antenna-tip {
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+#tip1 { left: 22%; top: 15%; }
+#tip2 { left: 73%; top: 15%; }
+
 /* Only for very small phones (iPhone SE, older Androids) */
 @media (max-width: 375px) {
     .butterfly-video {
-        width: 230px;
-        height: 230px;
+        width: 280px;
+        height: 280px;
     }
     .content--has-tracker {
         padding-top: 58px;

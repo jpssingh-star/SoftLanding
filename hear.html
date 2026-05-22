@@ -57,11 +57,7 @@
             <div class="prog-line">
                 <div class="prog-line-fill" style="width:44%"></div>
                 <div class="prog-butterfly" id="progButterfly" style="left:44%">
-                    <div class="prog-bf-icon">
-                        <div class="prog-wing prog-wing--l"></div>
-                        <div class="prog-wing prog-wing--r"></div>
-                        <div class="prog-bf-body"></div>
-                    </div>
+                    <img class="prog-bf-img" src="" alt="">
                 </div>
             </div>
         </div>
@@ -175,10 +171,14 @@
             isRecording ? stopRecording() : startRecording();
         });
 
-        setTimeout(() => { const b = document.getElementById('progButterfly'); if(b){ b.classList.add('flapping'); setTimeout(()=>b.classList.remove('flapping'),1200); } }, 500);
+        (function() {
+            const _t = localStorage.getItem('bf-theme') || '';
+            const _f = {'': 'images/swallowtail-flap.gif', 'monarch': 'images/monarch-flap.gif', 'morpho': 'images/bluemorpho-flap.gif'};
+            document.querySelector('.prog-bf-img').src = _f[_t] || _f[''];
+        })();
 
-        if (localStorage.getItem('music-on') !== 'false') { document.getElementById('bgMusic').play().catch(() => {}); }
+        (function(){ const m=document.getElementById('bgMusic'); const t=parseFloat(localStorage.getItem('music-time')||'0'); if(localStorage.getItem('music-on')!=='false'){ m.play().then(()=>{ if(t>0)m.currentTime=t; }).catch(()=>{}); } window.addEventListener('pagehide',()=>localStorage.setItem('music-time',m.currentTime)); })();
     </script>
-    <audio id="bgMusic" loop src="images/theme-music.mp3"></audio>
+    <audio id="bgMusic" loop src="Pufino - Hopeful (freetouse.com).mp3"></audio>
 </body>
 </html>
