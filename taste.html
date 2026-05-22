@@ -63,9 +63,10 @@
             const _t   = localStorage.getItem('bf-theme') || '';
             const _png  = {'': 'images/swallowtail.png',      'monarch': 'images/monarch.png',      'morpho': 'images/bluemorpho.png'};
             const _flap = {'': 'images/swallowtail.gif', 'monarch': 'images/monarch.gif', 'morpho': 'images/bluemorpho.gif'};
+            const _prog = {'': 'images/swallowtail-flap.gif', 'monarch': 'images/monarch-flap.gif', 'morpho': 'images/bluemorpho-flap.gif'};
             const tasteBfImg = document.querySelector('.taste-bf-img');
 
-            document.querySelector('.prog-bf-img').src = _flap[_t] || _flap[''];
+            document.querySelector('.prog-bf-img').src = _prog[_t] || _prog[''];
             tasteBfImg.src = _png[_t] || _png[''];
 
             let fed = false;
