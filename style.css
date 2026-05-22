@@ -145,8 +145,42 @@ body {
 }
 
 .screen--leaving {
+    display: flex !important;
     animation: pageLeave 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     pointer-events: none;
+}
+
+/* ─── Global progress bar (SPA) ──────────────────────────── */
+
+.global-prog-track {
+    position: fixed;
+    top: clamp(1.5rem, 5vw, 2.5rem);
+    left: 40px;
+    right: 24px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.global-prog-track.visible { opacity: 1; }
+
+@keyframes bfFly {
+    0%   { transform: translateX(-50%) translateY(-50%); }
+    20%  { transform: translateX(-50%) translateY(calc(-50% - 10px)) rotate(-6deg); }
+    40%  { transform: translateX(-50%) translateY(calc(-50% + 4px))  rotate(3deg); }
+    60%  { transform: translateX(-50%) translateY(calc(-50% - 7px))  rotate(-4deg); }
+    80%  { transform: translateX(-50%) translateY(calc(-50% + 2px))  rotate(2deg); }
+    100% { transform: translateX(-50%) translateY(-50%); }
+}
+
+.prog-butterfly.flying {
+    animation: bfFly 0.65s ease-in-out;
 }
 
 /* ─── Screen base ────────────────────────────────────────── */
@@ -154,14 +188,18 @@ body {
 .screen {
     position: fixed;
     inset: 0;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow-y: auto;
     background: url('images/swallowtailbg.png') center/cover no-repeat;
-    animation: pageEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
     padding-top: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.screen.active {
+    display: flex;
+    animation: pageEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 html.theme-monarch .screen {
@@ -1038,6 +1076,7 @@ html.theme-morpho .butterfly-video {
     position: absolute;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
+    transition: left 0.65s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .prog-bf-icon {

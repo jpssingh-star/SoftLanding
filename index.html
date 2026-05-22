@@ -8,103 +8,637 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script>const t=localStorage.getItem('bf-theme');if(t)document.documentElement.classList.add('theme-'+t);</script>
+    <script>const _t=localStorage.getItem('bf-theme')||'';if(_t)document.documentElement.classList.add('theme-'+_t);</script>
 </head>
 <body>
-    <div class="screen active screen--breathing">
-        <div class="home-top-bar">
-            <div class="species-picker" id="speciesPicker">
-                <button class="species-btn" data-theme="" data-gif="images/swallowtail.gif">
-                    <img class="species-icon" src="images/swallowtail.png" alt="">
-                    <span>Swallowtail</span>
-                </button>
-                <button class="species-btn" data-theme="monarch" data-gif="images/monarch.gif">
-                    <img class="species-icon" src="images/monarch.png" alt="">
-                    <span>Monarch</span>
-                </button>
-                <button class="species-btn" data-theme="morpho" data-gif="images/bluemorpho.gif">
-                    <img class="species-icon" src="images/bluemorpho.png" alt="">
-                    <span>Blue Morpho</span>
-                </button>
-            </div>
-            <button class="sound-toggle" id="soundToggle" aria-label="Toggle music"></button>
-        </div>
-        <div class="content breathing-content">
-            <img class="butterfly-video" id="butterflyVideo" src="images/swallowtail.gif" alt="">
-            <header class="page-header">
-                <h1 class="heading heading--light">Soft Landing</h1>
-                <p class="subheading subheading--light">Grounding made gentle</p>
-            </header>
-            <div class="btn-group">
-                <button class="btn btn--fill" id="btnReady">I'm ready</button>
-            </div>
+
+<div class="confetti-layer" id="confettiLayer"></div>
+
+<!-- Global progress bar -->
+<div class="global-prog-track" id="globalProgTrack">
+    <img class="prog-lily" src="images/lily.png" alt="">
+    <div class="prog-line">
+        <div class="prog-line-fill" id="globalProgFill" style="width:0%"></div>
+        <div class="prog-butterfly" id="globalProgButterfly" style="left:0%">
+            <img class="prog-bf-img" id="globalProgBfImg" src="" alt="">
         </div>
     </div>
+</div>
 
-    <audio id="bgMusic" loop src="Pufino - Hopeful (freetouse.com).mp3"></audio>
+<!-- ── Home ───────────────────────────────────────────────── -->
+<div class="screen screen--breathing active" id="screen-home">
+    <div class="home-top-bar">
+        <div class="species-picker" id="speciesPicker">
+            <button class="species-btn" data-theme="" data-gif="images/swallowtail.gif">
+                <img class="species-icon" src="images/swallowtail.png" alt="">
+                <span>Swallowtail</span>
+            </button>
+            <button class="species-btn" data-theme="monarch" data-gif="images/monarch.gif">
+                <img class="species-icon" src="images/monarch.png" alt="">
+                <span>Monarch</span>
+            </button>
+            <button class="species-btn" data-theme="morpho" data-gif="images/bluemorpho.gif">
+                <img class="species-icon" src="images/bluemorpho.png" alt="">
+                <span>Blue Morpho</span>
+            </button>
+        </div>
+        <button class="sound-toggle" id="soundToggle" aria-label="Toggle music"></button>
+    </div>
+    <div class="content breathing-content">
+        <img class="butterfly-video" id="butterflyVideo" src="" alt="">
+        <header class="page-header">
+            <h1 class="heading heading--light">Soft Landing</h1>
+            <p class="subheading subheading--light">Grounding made gentle</p>
+        </header>
+        <div class="btn-group">
+            <button class="btn btn--fill" id="btnReady">I'm ready</button>
+        </div>
+    </div>
+</div>
 
-    <script>
-        // Species picker
-        const bfImg = document.getElementById('butterflyVideo');
-        const GIFS = {
-            '':       'images/swallowtail.gif',
-            'monarch':'images/monarch.gif',
-            'morpho': 'images/bluemorpho.gif',
-        };
+<!-- ── Camera (Step 1) ────────────────────────────────────── -->
+<div class="screen" id="screen-camera">
+    <div class="content content--camera content--has-tracker">
+        <header class="page-header">
+            <span class="step-badge">Step 1 of 5 &nbsp;·&nbsp; See</span>
+            <h1 class="heading">What do you see?</h1>
+            <p class="subheading">Find 5 things you can see</p>
+        </header>
+        <p class="camera-prompt" id="cameraPrompt">Find a plant</p>
+        <div class="camera-container">
+            <img class="wing wing--left" src="images/left.png" alt="">
+            <img class="wing wing--right" src="images/right.png" alt="">
+            <div class="camera-wrap" id="cameraWrap">
+                <video class="camera-feed" id="cameraFeed" autoplay playsinline muted></video>
+                <div class="frame-corner frame-corner--tl"></div>
+                <div class="frame-corner frame-corner--tr"></div>
+                <div class="frame-corner frame-corner--bl"></div>
+                <div class="frame-corner frame-corner--br"></div>
+                <div class="photo-counter" id="photoCounter">1 of 5</div>
+                <div class="camera-flash" id="cameraFlash"></div>
+                <div class="camera-error" id="cameraError">
+                    <p>Camera access is needed.<br>Allow permission and reload.</p>
+                </div>
+            </div>
+        </div>
+        <button class="btn--capture" id="btnCapture" aria-label="Take photo"></button>
+        <canvas id="captureCanvas" hidden></canvas>
+    </div>
+</div>
 
-        function applyTheme(theme, gifSrc) {
-            localStorage.setItem('bf-theme', theme);
-            document.documentElement.classList.remove('theme-monarch', 'theme-morpho');
-            if (theme) document.documentElement.classList.add('theme-' + theme);
-            bfImg.src = gifSrc || GIFS[theme] || GIFS[''];
-        }
+<!-- ── Touch (Step 2) ─────────────────────────────────────── -->
+<div class="screen" id="screen-touch">
+    <div class="content content--touch content--has-tracker">
+        <header class="page-header">
+            <span class="step-badge">Step 2 of 5 &nbsp;·&nbsp; Touch</span>
+            <h1 class="heading">What can you feel?</h1>
+            <p class="subheading">Touch 4 things around you</p>
+        </header>
+        <div class="touch-grid" id="touchGrid"></div>
+        <p class="touch-progress" id="touchProgress">0 of 4 touched</p>
+    </div>
+</div>
 
-        const saved = localStorage.getItem('bf-theme') || '';
-        document.querySelectorAll('.species-btn').forEach(btn => {
-            if (btn.dataset.theme === saved) btn.classList.add('active');
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.species-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                applyTheme(btn.dataset.theme, btn.dataset.gif);
-            });
+<!-- ── Hear (Step 3) ──────────────────────────────────────── -->
+<div class="screen" id="screen-hear">
+    <div class="content content--hear content--has-tracker">
+        <header class="page-header">
+            <span class="step-badge">Step 3 of 5 &nbsp;·&nbsp; Hear</span>
+            <h1 class="heading">What can you hear?</h1>
+            <p class="subheading">Capture 3 sounds around you</p>
+        </header>
+        <div class="audio-card">
+            <svg class="audio-symbol" viewBox="0 0 36 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="15" width="9" height="10" rx="1.5" stroke="currentColor" stroke-width="2.5"/>
+                <path d="M11 15 L23 5 L23 35 L11 25 Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+            </svg>
+            <div class="audio-bars" id="audioBars">
+                <div class="audio-bar"></div><div class="audio-bar"></div>
+                <div class="audio-bar"></div><div class="audio-bar"></div>
+                <div class="audio-bar"></div><div class="audio-bar"></div>
+                <div class="audio-bar"></div><div class="audio-bar"></div>
+                <div class="audio-bar"></div><div class="audio-bar"></div>
+                <div class="audio-bar"></div><div class="audio-bar"></div>
+                <div class="audio-bar"></div><div class="audio-bar"></div>
+            </div>
+        </div>
+        <div class="hear-leds">
+            <div class="hear-led" id="led1"></div>
+            <div class="hear-led" id="led2"></div>
+            <div class="hear-led" id="led3"></div>
+        </div>
+        <button class="btn--record" id="btnRecord" aria-label="Record sound"></button>
+        <p class="hear-status" id="hearStatus">Tap to record</p>
+    </div>
+</div>
+
+<!-- ── Smell (Step 4) ─────────────────────────────────────── -->
+<div class="screen" id="screen-smell">
+    <div class="content content--smell content--has-tracker">
+        <header class="page-header">
+            <span class="step-badge">Step 4 of 5 &nbsp;·&nbsp; Smell</span>
+            <h1 class="heading">What can you smell?</h1>
+            <p class="subheading">Drag 2 scents you smell</p>
+        </header>
+        <div class="smell-body-wrap">
+            <img class="smell-body-img" src="images/body.png" alt="">
+            <div class="antenna-tip" id="tip1">
+                <span class="antenna-drop-symbol" id="label1">?</span>
+            </div>
+            <div class="antenna-tip" id="tip2">
+                <span class="antenna-drop-symbol" id="label2">?</span>
+            </div>
+        </div>
+        <div class="smell-palette" id="smellPalette"></div>
+    </div>
+</div>
+
+<!-- ── Taste (Step 5) ─────────────────────────────────────── -->
+<div class="screen" id="screen-taste">
+    <div class="content content--has-tracker">
+        <header class="page-header">
+            <span class="step-badge">Step 5 of 5 &nbsp;·&nbsp; Taste</span>
+            <h1 class="heading">Go get something to taste.</h1>
+            <p class="subheading">Drink water, eat a snack, or chew gum</p>
+        </header>
+        <div class="taste-butterfly" id="tasteBf">
+            <img class="taste-bf-img" id="tasteBfImg" src="" alt="">
+        </div>
+        <div class="taste-options">
+            <button class="taste-opt"><span class="taste-emoji">≈</span><span class="taste-label">Water</span></button>
+            <button class="taste-opt"><span class="taste-emoji">✦</span><span class="taste-label">Sweet candy</span></button>
+            <button class="taste-opt"><span class="taste-emoji">✸</span><span class="taste-label">Sour candy</span></button>
+            <button class="taste-opt"><span class="taste-emoji">✿</span><span class="taste-label">Snack</span></button>
+            <button class="taste-opt"><span class="taste-emoji">☽</span><span class="taste-label">Mint / gum</span></button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Grounded (Completion) ──────────────────────────────── -->
+<div class="screen screen--breathing" id="screen-grounded">
+    <div class="content breathing-content">
+        <img class="butterfly-video" id="groundedBfGif" src="" alt="">
+        <header class="page-header">
+            <h1 class="heading heading--light">You landed softly</h1>
+            <p class="subheading subheading--light">5 · 4 · 3 · 2 · 1 — you did it!</p>
+        </header>
+        <footer class="btn-group">
+            <button class="btn btn--fill" id="btnClose">Close</button>
+        </footer>
+    </div>
+</div>
+
+<audio id="bgMusic" loop src="Pufino - Hopeful (freetouse.com).mp3"></audio>
+
+<script>
+// ── Image maps ────────────────────────────────────────────
+const THEME_GIF  = { '': 'images/swallowtail.gif',      monarch: 'images/monarch.gif',      morpho: 'images/bluemorpho.gif'      };
+const THEME_FLAP = { '': 'images/swallowtail-flap.gif', monarch: 'images/monarch-flap.gif', morpho: 'images/bluemorpho-flap.gif' };
+const THEME_PNG  = { '': 'images/swallowtail.png',      monarch: 'images/monarch.png',      morpho: 'images/bluemorpho.png'      };
+
+let currentTheme = localStorage.getItem('bf-theme') || '';
+
+function applyTheme(theme) {
+    currentTheme = theme;
+    localStorage.setItem('bf-theme', theme);
+    document.documentElement.classList.remove('theme-monarch', 'theme-morpho');
+    if (theme) document.documentElement.classList.add('theme-' + theme);
+    document.getElementById('butterflyVideo').src  = THEME_GIF[theme]  || THEME_GIF[''];
+    document.getElementById('globalProgBfImg').src = THEME_FLAP[theme] || THEME_FLAP[''];
+    document.getElementById('tasteBfImg').src      = THEME_PNG[theme]  || THEME_PNG[''];
+    document.getElementById('groundedBfGif').src   = THEME_GIF[theme]  || THEME_GIF[''];
+}
+
+applyTheme(currentTheme);
+
+document.querySelectorAll('.species-btn').forEach(btn => {
+    if (btn.dataset.theme === currentTheme) btn.classList.add('active');
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.species-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyTheme(btn.dataset.theme);
+    });
+});
+
+// ── Music ─────────────────────────────────────────────────
+const music     = document.getElementById('bgMusic');
+const toggleBtn = document.getElementById('soundToggle');
+let musicOn = localStorage.getItem('music-on') !== 'false';
+
+const ICON_ON  = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+const ICON_OFF = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
+
+function applyMusicState(on) {
+    musicOn = on;
+    localStorage.setItem('music-on', on);
+    toggleBtn.innerHTML = on ? ICON_ON : ICON_OFF;
+    toggleBtn.setAttribute('aria-label', on ? 'Music on' : 'Music off');
+    if (on) music.play().catch(() => {});
+    else    music.pause();
+}
+
+toggleBtn.addEventListener('click', () => applyMusicState(!musicOn));
+applyMusicState(musicOn);
+
+// ── Navigation ────────────────────────────────────────────
+let currentScreenId = 'home';
+
+const PROG_STEPS = {
+    camera:   { pos:   0, fill:   0 },
+    touch:    { pos:  22, fill:  22 },
+    hear:     { pos:  44, fill:  44 },
+    smell:    { pos:  66, fill:  66 },
+    taste:    { pos:  88, fill:  88 },
+    grounded: { pos: 105, fill: 100 },
+};
+
+function goTo(id, onSwitch) {
+    const leaving  = document.getElementById('screen-' + currentScreenId);
+    const entering = document.getElementById('screen-' + id);
+    leaving.classList.add('screen--leaving');
+    setTimeout(() => {
+        leaving.classList.remove('active', 'screen--leaving');
+        if (onSwitch) onSwitch();
+        currentScreenId = id;
+        entering.classList.add('active');
+        setProgress(id);
+    }, 320);
+}
+
+function setProgress(screenId) {
+    const track = document.getElementById('globalProgTrack');
+    const step  = PROG_STEPS[screenId];
+    if (!step) {
+        track.classList.remove('visible', 'prog-track--complete');
+        // Reset silently while hidden so next run starts from 0
+        const bf = document.getElementById('globalProgButterfly');
+        bf.style.transition = 'none';
+        bf.style.left = '0%';
+        document.getElementById('globalProgFill').style.width = '0%';
+        document.getElementById('globalProgButterfly').classList.remove('prog-butterfly--landed');
+        requestAnimationFrame(() => { bf.style.transition = ''; });
+        return;
+    }
+    track.classList.add('visible');
+    track.classList.toggle('prog-track--complete', screenId === 'grounded');
+
+    const bf   = document.getElementById('globalProgButterfly');
+    const fill = document.getElementById('globalProgFill');
+    bf.classList.remove('flying');
+    void bf.offsetWidth;
+    bf.classList.add('flying');
+    bf.style.left   = step.pos  + '%';
+    fill.style.width = step.fill + '%';
+    bf.classList.toggle('prog-butterfly--landed', screenId === 'grounded');
+}
+
+// ── Home ──────────────────────────────────────────────────
+document.getElementById('btnReady').addEventListener('click', () => {
+    const bfImg = document.getElementById('butterflyVideo');
+    bfImg.classList.add('flying-up');
+    if (musicOn) music.play().catch(() => {});
+    setTimeout(() => {
+        bfImg.classList.remove('flying-up');
+        goTo('camera', initCamera);
+    }, 680);
+});
+
+// ── Camera ────────────────────────────────────────────────
+let cameraStream = null;
+let photosTaken  = 0;
+let selPrompts   = [];
+
+const PROMPTS = [
+    'Find a plant','Find your keys','Find a pencil','Find a cup or mug',
+    'Find a book','Find a pillow','Find a window','Find a bag',
+    'Find a photograph','Find a shoe','Find a clock','Find a mirror',
+    'Find something red','Find something blue','Find something green','Find something yellow',
+    'Find something colorful','Find something that sparkles','Find something wooden','Find something circular',
+    'Find something you love','Find something that makes you smile','Find something with 4 legs','Find something older than you',
+    'Find something alive','Find something cozy','Find something that moves','Find something that makes noise',
+    'Find the tallest thing nearby','Find the smallest thing nearby',
+    'Find something a friend gave you','Find your favorite color',
+    'Find something soft','Find something shiny','Find something with a pattern','Find something you use every day',
+];
+
+function pickRandom(arr, n) { return [...arr].sort(() => Math.random() - 0.5).slice(0, n); }
+
+function initCamera() {
+    photosTaken = 0;
+    selPrompts  = pickRandom(PROMPTS, 5);
+    document.getElementById('photoCounter').textContent  = '1 of 5';
+    document.getElementById('cameraPrompt').textContent  = selPrompts[0];
+    document.getElementById('cameraError').classList.remove('visible');
+    document.getElementById('btnCapture').disabled = false;
+
+    navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 960 } }
+    }).then(stream => {
+        cameraStream = stream;
+        document.getElementById('cameraFeed').srcObject = stream;
+    }).catch(() => {
+        document.getElementById('cameraError').classList.add('visible');
+        document.getElementById('btnCapture').disabled = true;
+    });
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(t => t.stop());
+        cameraStream = null;
+        document.getElementById('cameraFeed').srcObject = null;
+    }
+}
+
+function triggerFlash() {
+    const f = document.getElementById('cameraFlash');
+    f.style.transition = 'none'; f.style.opacity = '0.8';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        f.style.transition = 'opacity 0.35s ease'; f.style.opacity = '0';
+    }));
+}
+
+function setPrompt(text, fade) {
+    const el = document.getElementById('cameraPrompt');
+    if (!fade) { el.textContent = text; return; }
+    el.style.opacity = '0';
+    setTimeout(() => { el.textContent = text; el.style.opacity = '1'; }, 220);
+}
+
+document.getElementById('btnCapture').addEventListener('click', () => {
+    if (photosTaken >= 5 || !cameraStream) return;
+    const canvas = document.getElementById('captureCanvas');
+    const feed   = document.getElementById('cameraFeed');
+    canvas.width  = feed.videoWidth  || 640;
+    canvas.height = feed.videoHeight || 480;
+    canvas.getContext('2d').drawImage(feed, 0, 0);
+    photosTaken++;
+    triggerFlash();
+    if (photosTaken >= 5) {
+        document.getElementById('btnCapture').disabled = true;
+        setTimeout(() => goTo('touch', () => { stopCamera(); initTouch(); }), 500);
+    } else {
+        document.getElementById('photoCounter').textContent = `${photosTaken + 1} of 5`;
+        setPrompt(selPrompts[photosTaken], true);
+    }
+});
+
+// ── Touch ─────────────────────────────────────────────────
+const TOUCH_POOL = [
+    { emoji: '⚷', label: 'keys'          }, { emoji: '✎', label: 'pencil'        },
+    { emoji: '✄', label: 'stationary'    }, { emoji: '≈', label: 'water'         },
+    { emoji: '❀', label: 'plant'         }, { emoji: '♫', label: 'headphones'    },
+    { emoji: '↯', label: 'charger'       }, { emoji: '⊟', label: 'box'           },
+    { emoji: '✸', label: 'spiky object'  }, { emoji: '❦', label: 'cute object'   },
+    { emoji: '❅', label: 'cold object'   }, { emoji: '▬', label: 'smooth object' },
+    { emoji: '⚓︎',label: 'heavy object' }, { emoji: '○', label: 'round object'  },
+];
+
+let touchDoneCount = 0;
+
+function initTouch() {
+    touchDoneCount = 0;
+    const prog = document.getElementById('touchProgress');
+    prog.textContent = '0 of 4 touched';
+    prog.classList.remove('complete');
+    const grid = document.getElementById('touchGrid');
+    grid.innerHTML = '';
+    pickRandom(TOUCH_POOL, 12).forEach(item => {
+        const btn = document.createElement('button');
+        btn.className = 'touch-item';
+        btn.innerHTML = `<span class="touch-emoji">${item.emoji}</span><span class="touch-label">${item.label}</span>`;
+        btn.addEventListener('click', () => {
+            if (btn.classList.contains('checked')) return;
+            btn.classList.add('popping');
+            btn.addEventListener('animationend', () => {
+                btn.classList.remove('popping');
+                btn.classList.add('checked');
+                touchDoneCount++;
+                prog.textContent = `${touchDoneCount} of 4 touched`;
+                if (touchDoneCount >= 4) {
+                    prog.classList.add('complete');
+                    prog.textContent = 'All done ✓';
+                    setTimeout(() => goTo('hear', initHear), 700);
+                }
+            }, { once: true });
         });
+        grid.appendChild(btn);
+    });
+}
 
-        // Restore saved gif on load
-        applyTheme(saved);
+// ── Hear ──────────────────────────────────────────────────
+let recordingCount = 0, mediaRecorder = null, audioStream = null;
+let audioCtx = null, analyser = null, audioAnimFrame = null;
+let isRecording = false, autoStopTimer = null;
 
-        document.getElementById('btnReady').addEventListener('click', () => {
-            bfImg.classList.add('flying-up');
-            if (musicOn) { music.play().catch(() => {}); }
-            setTimeout(() => { window.location.href = 'camera.html'; }, 680);
+function initHear() {
+    recordingCount = 0; isRecording = false;
+    clearTimeout(autoStopTimer);
+    ['led1','led2','led3'].forEach(id => document.getElementById(id).classList.remove('lit'));
+    document.getElementById('hearStatus').textContent = 'Tap to record';
+    document.getElementById('btnRecord').disabled = false;
+    document.getElementById('btnRecord').classList.remove('recording');
+    document.getElementById('audioBars').classList.remove('recording');
+    cancelAnimationFrame(audioAnimFrame);
+    document.querySelectorAll('#audioBars .audio-bar').forEach(b => b.style.height = '3px');
+}
+
+function stopAudio() {
+    clearTimeout(autoStopTimer);
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') { isRecording = false; mediaRecorder.stop(); }
+    cancelAnimationFrame(audioAnimFrame);
+    if (audioStream) { audioStream.getTracks().forEach(t => t.stop()); audioStream = null; }
+    if (audioCtx)    { audioCtx.close(); audioCtx = null; analyser = null; }
+}
+
+function animateBars() {
+    const bars = document.querySelectorAll('#audioBars .audio-bar');
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    (function draw() {
+        audioAnimFrame = requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(data);
+        bars.forEach((bar, i) => {
+            const h = Math.max(4, (data[Math.floor(i * data.length / bars.length)] / 255) * 40 + 4);
+            bar.style.height = h + 'px';
         });
+    })();
+}
 
-        // ── Music toggle ──────────────────────────────────────
-        const music = document.getElementById('bgMusic');
-        const toggleBtn = document.getElementById('soundToggle');
-        let musicOn = localStorage.getItem('music-on') !== 'false'; // default on
+function setRecordingState(active) {
+    document.getElementById('btnRecord').classList.toggle('recording', active);
+    document.getElementById('audioBars').classList.toggle('recording', active);
+}
 
-        const ICON_ON  = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
-        const ICON_OFF = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`;
+function stopRecording() {
+    clearTimeout(autoStopTimer);
+    setRecordingState(false);
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+}
 
-        function applyMusicState(play) {
-            musicOn = play;
-            localStorage.setItem('music-on', play ? 'true' : 'false');
-            toggleBtn.innerHTML = play ? ICON_ON : ICON_OFF;
-            toggleBtn.setAttribute('aria-label', play ? 'Music on' : 'Music off');
-            if (play) {
-                const t = parseFloat(localStorage.getItem('music-time') || '0');
-                music.play().catch(() => {});
-                if (t > 0) { music.currentTime = t; }
-            } else {
-                music.pause();
-            }
+async function startRecording() {
+    if (!audioStream) {
+        try { audioStream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+        catch { document.getElementById('hearStatus').textContent = 'Microphone access needed.'; return; }
+    }
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser  = audioCtx.createAnalyser(); analyser.fftSize = 64;
+        audioCtx.createMediaStreamSource(audioStream).connect(analyser);
+    }
+    mediaRecorder = new MediaRecorder(audioStream);
+    mediaRecorder.ondataavailable = () => {};
+    mediaRecorder.onstop = () => {
+        isRecording = false; setRecordingState(false);
+        cancelAnimationFrame(audioAnimFrame);
+        document.querySelectorAll('#audioBars .audio-bar').forEach(b => b.style.height = '3px');
+        const LEDs = ['led1','led2','led3'];
+        document.getElementById(LEDs[recordingCount]).classList.add('lit');
+        recordingCount++;
+        if (recordingCount >= 3) {
+            document.getElementById('hearStatus').textContent = 'Well done!';
+            document.getElementById('btnRecord').disabled = true;
+            setTimeout(() => goTo('smell', () => { stopAudio(); initSmell(); }), 900);
+        } else {
+            document.getElementById('hearStatus').textContent = 'Nice one! Find another.';
         }
+    };
+    mediaRecorder.start();
+    isRecording = true; setRecordingState(true);
+    document.getElementById('hearStatus').textContent = 'Recording… tap to stop';
+    animateBars();
+    autoStopTimer = setTimeout(() => { if (isRecording) stopRecording(); }, 5000);
+}
 
-        toggleBtn.addEventListener('click', () => applyMusicState(!musicOn));
-        window.addEventListener('pagehide', () => { localStorage.setItem('music-time', music.currentTime); });
+document.getElementById('btnRecord').addEventListener('click', () => {
+    isRecording ? stopRecording() : startRecording();
+});
 
-        // Auto-start if preference is on (requires user gesture — handled on btnReady)
-        applyMusicState(musicOn);
-    </script>
+// ── Smell ─────────────────────────────────────────────────
+const SCENTS = [
+    { symbol: '❀', label: 'floral'    }, { symbol: '≈', label: 'fresh air' },
+    { symbol: '♡', label: 'lavender'  }, { symbol: '✸', label: 'citrus'    },
+    { symbol: '≡', label: 'cedar'     }, { symbol: '∿', label: 'rain'      },
+    { symbol: '◎', label: 'sweet'     }, { symbol: '!', label: 'stinky'    },
+];
+
+let smellDragEl = null, smellDragSrc = null, smellFilled = 0;
+
+function initSmell() {
+    smellFilled = 0;
+    ['tip1','tip2'].forEach(id => {
+        document.getElementById(id).classList.remove('filled','drag-over');
+    });
+    document.getElementById('label1').textContent = '?';
+    document.getElementById('label2').textContent = '?';
+    const palette = document.getElementById('smellPalette');
+    palette.innerHTML = '';
+    SCENTS.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'smell-item';
+        el.innerHTML = `<span class="smell-symbol">${s.symbol}</span><span class="smell-label">${s.label}</span>`;
+        el.dataset.symbol = s.symbol;
+        el.addEventListener('pointerdown', smellStartDrag);
+        palette.appendChild(el);
+    });
+}
+
+function smellStartDrag(e) {
+    e.preventDefault();
+    smellDragSrc = e.currentTarget;
+    smellDragEl  = smellDragSrc.cloneNode(true);
+    const r = smellDragSrc.getBoundingClientRect();
+    Object.assign(smellDragEl.style, {
+        position:'fixed', width:r.width+'px', zIndex:1000,
+        pointerEvents:'none', opacity:'0.92', transform:'scale(1.12)', transition:'none',
+        left:(e.clientX-r.width/2)+'px', top:(e.clientY-r.height/2)+'px',
+        borderRadius:'var(--radius-md)',
+    });
+    document.body.appendChild(smellDragEl);
+    document.addEventListener('pointermove', smellOnMove);
+    document.addEventListener('pointerup',   smellOnUp);
+}
+
+function smellOnMove(e) {
+    if (!smellDragEl) return;
+    smellDragEl.style.left = (e.clientX - smellDragEl.offsetWidth/2)  + 'px';
+    smellDragEl.style.top  = (e.clientY - smellDragEl.offsetHeight/2) + 'px';
+    ['tip1','tip2'].forEach(id => {
+        const tip = document.getElementById(id);
+        const rc  = tip.getBoundingClientRect();
+        tip.classList.toggle('drag-over',
+            Math.hypot(e.clientX-(rc.left+rc.width/2), e.clientY-(rc.top+rc.height/2)) < 48
+            && !tip.classList.contains('filled'));
+    });
+}
+
+function smellOnUp(e) {
+    document.removeEventListener('pointermove', smellOnMove);
+    document.removeEventListener('pointerup',   smellOnUp);
+    if (smellDragEl) { smellDragEl.remove(); smellDragEl = null; }
+    ['tip1','tip2'].forEach((id, i) => {
+        const tip = document.getElementById(id);
+        tip.classList.remove('drag-over');
+        if (tip.classList.contains('filled')) return;
+        const rc = tip.getBoundingClientRect();
+        if (Math.hypot(e.clientX-(rc.left+rc.width/2), e.clientY-(rc.top+rc.height/2)) < 52) {
+            tip.classList.add('filled');
+            document.getElementById(i === 0 ? 'label1' : 'label2').textContent = smellDragSrc.dataset.symbol;
+            smellDragSrc.classList.add('used');
+            smellFilled++;
+            if (smellFilled >= 2) setTimeout(() => goTo('taste', initTaste), 700);
+        }
+    });
+    smellDragSrc = null;
+}
+
+// ── Taste ─────────────────────────────────────────────────
+let tasteFed = false;
+
+function initTaste() {
+    tasteFed = false;
+    document.getElementById('tasteBfImg').src = THEME_PNG[currentTheme] || THEME_PNG[''];
+    document.querySelectorAll('.taste-opt').forEach(b => b.classList.remove('selected'));
+}
+
+document.querySelectorAll('.taste-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (tasteFed) return;
+        tasteFed = true;
+        document.querySelectorAll('.taste-opt').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById('tasteBfImg').src = THEME_GIF[currentTheme] || THEME_GIF[''];
+        setTimeout(() => goTo('grounded', initGrounded), 1400);
+    });
+});
+
+// ── Grounded ──────────────────────────────────────────────
+function initGrounded() {
+    document.getElementById('groundedBfGif').src = THEME_GIF[currentTheme] || THEME_GIF[''];
+    launchConfetti();
+}
+
+document.getElementById('btnClose').addEventListener('click', () => {
+    goTo('home', () => {
+        document.getElementById('butterflyVideo').src = THEME_GIF[currentTheme] || THEME_GIF[''];
+        document.getElementById('butterflyVideo').classList.remove('flying-up');
+    });
+});
+
+// ── Confetti ──────────────────────────────────────────────
+function launchConfetti() {
+    const layer = document.getElementById('confettiLayer');
+    function spawn(delay) {
+        const el = document.createElement('img');
+        el.src = 'images/lily.png'; el.className = 'conf conf-lily';
+        const x = 5 + Math.random() * 90, dur = 2.0 + Math.random() * 2.4;
+        const sz = 18 + Math.random() * 82, rot = Math.random() * 360;
+        el.style.cssText = `left:${x}%;width:${sz}px;transform:rotate(${rot}deg);animation-name:confFall;animation-duration:${dur}s;animation-delay:${delay}s;animation-fill-mode:forwards;`;
+        layer.appendChild(el);
+        setTimeout(() => el.remove(), (delay + dur + 0.2) * 1000);
+    }
+    for (let i = 0; i < 54; i++) spawn(i * (0.6 / 54));
+    setTimeout(() => { for (let i = 0; i < 24; i++) spawn(i * 0.04); }, 1200);
+}
+</script>
 </body>
 </html>
