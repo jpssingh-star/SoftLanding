@@ -151,7 +151,7 @@ body {
     overflow-y: auto;
     background: url('images/swallowtailbg.png') center/cover no-repeat;
     animation: pageEnter 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
-    padding-top: clamp(1.5rem, 5vw, 2.5rem);
+    padding-top: clamp(3rem, 9vw, 5rem);
 }
 
 html.theme-monarch .screen {
@@ -1203,7 +1203,7 @@ html.theme-morpho .screen {
 
 .breathing-content {
     gap: clamp(1.4rem, 4.5vw, 2.2rem);
-    padding-top: clamp(5rem, 14vw, 7rem);
+    padding-top: clamp(7rem, 18vw, 9rem);
 }
 
 .btn {
