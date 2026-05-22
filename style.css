@@ -206,6 +206,11 @@ html.theme-monarch .screen {
     background: url('images/monarchbg.png') top center/cover no-repeat;
 }
 
+html.theme-monarch .butterfly-video,
+html.theme-morpho .butterfly-video {
+    transform: translateX(2.6%);
+}
+
 html.theme-morpho .screen {
     background: url('images/morphobg.png') top center/cover no-repeat;
 }
@@ -243,6 +248,17 @@ html.theme-morpho .screen {
 
 .butterfly-video.flying-up {
     animation: butterflyFlyUp 0.68s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+html.theme-monarch .butterfly-video.flying-up,
+html.theme-morpho .butterfly-video.flying-up {
+    animation: butterflyFlyUpOffset 0.68s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes butterflyFlyUpOffset {
+    0%   { transform: translateX(2.6%) translateY(0) scale(1);       opacity: 1; }
+    60%  { transform: translateX(2.6%) translateY(-30%) scale(1.08); opacity: 1; }
+    100% { transform: translateX(2.6%) translateY(-130%) scale(0.9); opacity: 0; }
 }
 
 .heading--light   { color: var(--theme-text); }
