@@ -158,8 +158,16 @@ html.theme-monarch .screen {
     background: url('images/monarchbg.png') top center/cover no-repeat;
 }
 
+html.theme-monarch .butterfly-video {
+    object-position: center 40%;
+}
+
 html.theme-morpho .screen {
     background: url('images/morphobg.png') top center/cover no-repeat;
+}
+
+html.theme-morpho .butterfly-video {
+    object-position: center 40%;
 }
 
 /* ─── Breathing screen ───────────────────────────────────── */
