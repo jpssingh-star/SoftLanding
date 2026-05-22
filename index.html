@@ -301,6 +301,7 @@ document.getElementById('btnReady').addEventListener('click', () => {
     bfImg.classList.add('flying-up');
     if (musicOn) music.play().catch(() => {});
     setTimeout(() => {
+        bfImg.style.opacity = '0';
         bfImg.classList.remove('flying-up');
         goTo('camera', initCamera);
     }, 680);
@@ -622,8 +623,10 @@ function initGrounded() {
 
 document.getElementById('btnClose').addEventListener('click', () => {
     goTo('home', () => {
-        document.getElementById('butterflyVideo').src = THEME_GIF[currentTheme] || THEME_GIF[''];
-        document.getElementById('butterflyVideo').classList.remove('flying-up');
+        const bv = document.getElementById('butterflyVideo');
+        bv.src = THEME_GIF[currentTheme] || THEME_GIF[''];
+        bv.classList.remove('flying-up');
+        bv.style.opacity = '';
     });
 });
 
