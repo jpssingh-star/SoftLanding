@@ -1326,7 +1326,7 @@ html.theme-morpho .butterfly-video.flying-up {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    gap: 12px;
+    gap: 2px;
     align-items: center;
     justify-content: center;
     width: 100%;
