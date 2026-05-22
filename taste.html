@@ -77,7 +77,10 @@
                     document.querySelectorAll('.taste-opt').forEach(b => b.classList.remove('selected'));
                     btn.classList.add('selected');
                     tasteBfImg.src = _flap[_t] || _flap[''];
-                    setTimeout(() => { window.location.href = 'grounded.html'; }, 1400);
+                    setTimeout(() => {
+                        document.querySelector('.screen').classList.add('screen--leaving');
+                        setTimeout(() => { window.location.href = 'grounded.html'; }, 320);
+                    }, 1080);
                 });
             });
         })();

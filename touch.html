@@ -81,7 +81,10 @@
                     if (touchDoneCount >= TOTAL_TOUCH) {
                         touchProgress.classList.add('complete');
                         touchProgress.textContent = 'All done ✓';
-                        setTimeout(() => { window.location.href = 'hear.html'; }, 700);
+                        setTimeout(() => {
+                            document.querySelector('.screen').classList.add('screen--leaving');
+                            setTimeout(() => { window.location.href = 'hear.html'; }, 320);
+                        }, 380);
                     }
                 }, { once: true });
             });

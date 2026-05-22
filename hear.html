@@ -153,7 +153,10 @@
                 if (recordingCount >= TOTAL_RECORDINGS) {
                     hearStatus.textContent = 'Well done!';
                     btnRecord.disabled = true;
-                    setTimeout(() => { stopAudio(); window.location.href = 'smell.html'; }, 900);
+                    setTimeout(() => {
+                        document.querySelector('.screen').classList.add('screen--leaving');
+                        setTimeout(() => { stopAudio(); window.location.href = 'smell.html'; }, 320);
+                    }, 580);
                 } else {
                     hearStatus.textContent = 'Nice one! Find another.';
                 }

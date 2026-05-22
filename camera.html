@@ -133,7 +133,10 @@
 
             if (photosTaken >= TOTAL_PHOTOS) {
                 btnCapture.disabled = true;
-                setTimeout(() => { stopCamera(); window.location.href = 'touch.html'; }, 500);
+                setTimeout(() => {
+                    document.querySelector('.screen').classList.add('screen--leaving');
+                    setTimeout(() => { stopCamera(); window.location.href = 'touch.html'; }, 320);
+                }, 180);
             } else {
                 updatePhotoCounter();
                 setPrompt(selectedPrompts[photosTaken], true);

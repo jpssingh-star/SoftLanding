@@ -116,7 +116,10 @@
                     labels[i].textContent = dragSrc.dataset.symbol;
                     dragSrc.classList.add('used');
                     filled++;
-                    if (filled >= 2) setTimeout(() => { window.location.href = 'taste.html'; }, 700);
+                    if (filled >= 2) setTimeout(() => {
+                        document.querySelector('.screen').classList.add('screen--leaving');
+                        setTimeout(() => { window.location.href = 'taste.html'; }, 320);
+                    }, 380);
                 }
             });
             dragSrc = null;
