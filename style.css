@@ -208,7 +208,7 @@ html.theme-monarch .screen {
 
 html.theme-monarch .butterfly-video {
     object-position: 50% 72%;
-    transform: translateX(12%);
+    transform: translateX(20%);
 }
 
 html.theme-morpho .screen {
@@ -217,7 +217,7 @@ html.theme-morpho .screen {
 
 html.theme-morpho .butterfly-video {
     object-position: 50% 72%;
-    transform: translateX(12%);
+    transform: translateX(20%);
 }
 
 /* ─── Breathing screen ───────────────────────────────────── */
