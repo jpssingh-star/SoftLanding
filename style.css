@@ -1335,7 +1335,6 @@ html.theme-morpho .butterfly-video.flying-up {
 .smell-lilies .antenna-tip {
     width: 210px !important;
     height: 210px !important;
-    margin-left: -28px;
     border: none !important;
     background: transparent !important;
     box-shadow: none !important;
@@ -1343,6 +1342,10 @@ html.theme-morpho .butterfly-video.flying-up {
     position: relative !important;
     flex-shrink: 0;
     display: block !important;
+}
+
+.smell-lilies .antenna-tip + .antenna-tip {
+    margin-left: -28px;
 }
 
 .smell-lily-img {
